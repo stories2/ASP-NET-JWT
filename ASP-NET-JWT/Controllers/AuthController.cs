@@ -12,11 +12,11 @@ namespace ASP_NET_JWT.Controllers
 {
     public class AuthController : ApiController
     {
-        [HttpGet]
-        public IHttpActionResult test()
-        {
-            return Ok();
-        }
+        //[HttpGet]
+        //public IHttpActionResult test()
+        //{
+        //    return Ok();
+        //}
 
         [HttpPost]
         public HttpResponseMessage Login([FromBody]User user)
