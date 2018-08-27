@@ -9,5 +9,10 @@ namespace ASP_NET_JWT.Controllers
 {
     public class AuthController : ApiController
     {
+        [HttpGet]
+        public IHttpActionResult test()
+        {
+            return Ok();
+        }
     }
 }
