@@ -11,7 +11,7 @@ namespace ASP_NET_JWT.Models
 
     public enum UserRole
     {
-        NORMAL,
-        ADMIN
+        ALLIANCE,
+        HORDE
     }
 }
