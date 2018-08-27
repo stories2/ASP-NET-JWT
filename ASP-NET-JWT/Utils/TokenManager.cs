@@ -37,5 +37,61 @@ namespace ASP_NET_JWT.Utils
 
             return jwtTokenHandler.WriteToken(jwtToken);
         }
+
+        public static string ValidateToken(string token)
+        {
+            string userName = null;
+            ClaimsIdentity identity = null;
+
+            ClaimsPrincipal principal = GetClaimsPrincipal(token);
+            if(principal == null)
+            {
+                return null;
+            }
+
+            try
+            {
+                identity = (ClaimsIdentity)principal.Identity;
+            }
+            catch(Exception err)
+            {
+                return null;
+            }
+
+            Claim userNameClaim = identity.FindFirst(ClaimTypes.Name); //line 24
+            userName = userNameClaim.Value;
+            return userName;
+        }
+
+        static ClaimsPrincipal GetClaimsPrincipal(string token)
+        {
+            try
+            {
+                JwtSecurityTokenHandler jwtTokenHandler = new JwtSecurityTokenHandler();
+                JwtSecurityToken jwtToken = (JwtSecurityToken)jwtTokenHandler.ReadToken(token);
+
+                if(jwtToken == null)
+                {
+                    return null;
+                }
+
+                byte[] privateByteKey = Convert.FromBase64String(privateKey);
+                TokenValidationParameters validationParams = new TokenValidationParameters()
+                {
+                    RequireExpirationTime = true,
+                    ValidateIssuer = false,
+                    ValidateAudience = false,
+                    IssuerSigningKey = new SymmetricSecurityKey(privateByteKey)
+                };
+
+                SecurityToken securityToken;
+                ClaimsPrincipal principal = jwtTokenHandler.ValidateToken(token, validationParams, out securityToken);
+                return principal;
+            }
+            catch(Exception err)
+            {
+                return null;
+            }
+        }
     }
 }
